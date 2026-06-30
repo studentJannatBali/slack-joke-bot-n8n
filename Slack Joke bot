@@ -1,0 +1,131 @@
+{
+  "name": "Slack Joke bot",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "28f85526-b85a-40f0-82f6-2e4d0e41374b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://v2.jokeapi.dev/joke/Any",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7cdd5d0b-fa16-4f91-9b79-ae6e5b55e4a9",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02943072-6bd1-46a1-9992-7db518903572",
+              "name": "delivery",
+              "value": "={{ $json.setup }}\n{{ $json.delivery }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "66e917ee-4102-4a1e-969d-e4f951e4c7ec",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BANN72BQU",
+          "mode": "list",
+          "cachedResultName": "first"
+        },
+        "text": "={{ $json.delivery }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "94f83335-eda7-4821-868b-51925864fc75",
+      "name": "Send a message",
+      "webhookId": "329dd58f-e09c-45ca-b991-b0894fbc3017",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ZL73FIRwp1HNzaIc",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "50efad33-6d42-409e-9229-97b52d52efaa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3da4aa938db170e6ba7a028570d9c9069fa7f43bc53480b507bc25ca4b3372c5"
+  },
+  "id": "XkOSwZeCKx7DfmCl",
+  "tags": []
+}
